@@ -51,6 +51,30 @@
   /* width: 15%; */
 }
 
+.progress{
+  width: 350px;
+  margin-top: 8px;
+}
+
+.progressBar{
+  width: 85%;
+}
+
+.timing{
+  display: flex;
+  padding: 2px 4px;
+  align-items: space-between;
+  justify-content: space-between;
+}
+
+.currentTime{
+  color: white;
+}
+
+.totalTime{
+  color: white;
+}
+
 .option-icon{
   height: 40px;
   cursor: pointer;

@@ -7,28 +7,34 @@ export default function SongItem(props) {
   console.log(props.song.name)
 
   const [audioURL, setAudioURL] = useState('');
+  const [currentTime, setCurrentTime] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  const [audio] = useState(new Audio(props.song.url)); 
 
   useEffect(() => {
-    // const audio = new Audio(props.song.url);
-    // // if(audio.paused) // Replace with your audio file URL
-    //   audio.play();
+    audio.pause(); 
+    audio.currentTime = 0; 
+    audio.play();
+    const updateTime = () => {
+      const newProgress = parseInt((audio.currentTime / audio.duration) * 100);
+      setCurrentTime(audio.currentTime);
+      setTotalTime(audio.duration)
+      setProgress(newProgress);
+    };
 
-    // Optional: You can add event listeners for other audio events (e.g., 'ended', 'pause', etc.)
-    // For example:
-    // audio.addEventListener('ended', () => {
-    //   console.log('Audio ended');
-    // });
+    audio.addEventListener('timeupdate', updateTime);
 
-    // Clean up audio when component is unmounted
-    // return () => {
-    //   audio.pause();
-    //   audio.currentTime = 0;
-    // };
-  }, []);
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateTime);
+      audio.pause(); 
+      audio.currentTime = 0;
+    };
+  }, [audio]);
 
   const handleClick = ()=>{
-    // console.log(document.getElementById("audio").play())
-    // document.getElementById("audio").play();
     if(props.activeSong !== 0){
       props.setActiveSong(props.activeSong - 1);
     }
@@ -57,8 +63,6 @@ export default function SongItem(props) {
     audio.play();
   }
 
- 
- 
   return (
     <>
       <div className='song' style={myStyles}>
@@ -69,11 +73,14 @@ export default function SongItem(props) {
         <div className='image'>
           <img src={`https://cms.samespace.com/assets/${props.song.cover}`} className='songCover'/>
         </div>
+        <div className='progressBar'>
+          <input type="range" name="range" value={progress} class="progress" min="0" max="100" />
+          <div className='timing'>
+            <div className='currentTime'>{parseInt(currentTime/60)}:{parseInt(currentTime%60)}</div>
+            <div className='totalTime'>{parseInt(totalTime/60)}:{parseInt(totalTime%60)}</div>
+          </div>
+        </div>
         <div className='controls'>
-            {/* <audio id="audio" controls>
-              <source src={props.song.url} type="audio/mp3"></source>
-            </audio>
-            */}
             <div className='controls'>
               <div className='options'>
                 <img src="./options.svg"  className='option-icon'/>
