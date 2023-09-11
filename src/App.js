@@ -26,8 +26,9 @@ function App() {
   const activeStyle = {
     backgroundColor: hexToRgba(songs[activeSong]?.accent || 'red'),
     borderRadius: "8px",
-    border: "2px solid black",
-    backdropFilter: "blur(40px)",
+    background: "transparent",
+    padding: "5px",
+    backdropFilter: "blur(15px) saturate(180%)",
     // -webkit-backdrop-filter: blur(40px);
   }
   
@@ -43,19 +44,6 @@ function App() {
     console.log(songs)
   }, []);
 
-  // const fetchduration = (url)=>{
-  //   const audioContext = new AudioContext(); 
-  //   // Load the audio file 
-  //   fetch(url) 
-  //     .then(response => response.arrayBuffer()) 
-  //     .then(buffer => audioContext.decodeAudioData(buffer)) 
-  //     .then(audioBuffer => { 
-  //       // Get the duration of the audio file 
-  //       const duration = audioBuffer.duration; 
-  //       console.log(`The audio file duration is ${duration} seconds`); 
-  //     }); 
-  // }
-
   return (
     <>
     <div className="main">
@@ -68,7 +56,7 @@ function App() {
       <div className='middle' style={myStyles}>
         <div className='category'>{category}</div>
         <div className=''>
-          <input type="text" className='searchBar' placeholder="Search Song, Artist"></input>
+          <input type="text" className='searchBar' placeholder="Search Song, Artist" /><img src="./search-icon.svg" className='search-icon' />
         </div>
         <div className='list'>
 
