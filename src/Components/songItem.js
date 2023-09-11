@@ -10,13 +10,17 @@ export default function SongItem(props) {
   const [currentTime, setCurrentTime] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const [audio] = useState(new Audio(props.song.url)); 
 
   useEffect(() => {
-    audio.pause(); 
-    audio.currentTime = 0; 
-    audio.play();
+    document.addEventListener('onLoad', ()=>{
+      audio.pause(); 
+      audio.currentTime = 0; 
+      audio.play();
+
+    })
     const updateTime = () => {
       const newProgress = parseInt((audio.currentTime / audio.duration) * 100);
       setCurrentTime(audio.currentTime);
@@ -32,7 +36,31 @@ export default function SongItem(props) {
       audio.pause(); 
       audio.currentTime = 0;
     };
-  }, [audio]);
+  }, []);
+
+  // useEffect(() => {
+  //   const updateTime = () => {
+  //     const newProgress = parseInt((audio.currentTime / audio.duration) * 100);
+  //     setCurrentTime(audio.currentTime);
+  //     setTotalTime(audio.duration)
+  //     setProgress(newProgress);
+  //   };
+
+  //   // Add event listener for time updates
+  //   audio.addEventListener('timeupdate', updateTime);
+
+  //   // Play audio when the component is loaded
+  //   audio.addEventListener('loadedmetadata', () => {
+  //     audio.play();
+  //   });
+
+  //   // Clean up event listeners and pause audio when the component unmounts
+  //   return () => {
+  //     audio.removeEventListener('timeupdate', updateTime);
+  //     audio.pause();
+  //   };
+  // }, [props.song.url, audio]);
+
 
   const handleClick = ()=>{
     if(props.activeSong !== 0){
@@ -50,17 +78,14 @@ export default function SongItem(props) {
   }
 
   const handlePlayPause = ()=>{
-    const url = props.song.url;
-    const audio = new Audio(url);
-    const isPlaying = localStorage.getItem('playing');
-    setAudioURL(url);
 
-    if(url !== audioURL){
-      console.log(url)
+    if(isPlaying){
       audio.pause();
+    }else{
+      audio.play();
     }
-    setAudioURL(url);
-    audio.play();
+    setIsPlaying(!isPlaying)
+
   }
 
   return (
@@ -87,7 +112,8 @@ export default function SongItem(props) {
               </div>
               <div className='controlers'>
                 <img src="./previous.svg" onClick={handleClick} className='previous' />
-                <img src="./play.svg" className='play' onClick={handlePlayPause}/>
+                { isPlaying ?  <img src="./pause.svg" className='play' onClick={handlePlayPause}/> : <img src="./play.svg" className='play' onClick={handlePlayPause}/>}
+                
                 <img src="./next.svg" className='next' onClick={handleRightClick} />
               </div>
               <div className='speakers'>
